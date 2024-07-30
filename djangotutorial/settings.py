@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,12 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-ho2p!=94*m+)y8ph7u2!l$@4t(@1f7@bqfn3%qw6n4)cu@6+q("
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-ho2p!=94*m+)y8ph7u2!l$@4t(@1f7@bqfn3%qw6n4)cu@6+q(')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -84,10 +84,12 @@ WSGI_APPLICATION = "djangotutorial.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "mssql",
-        "NAME": "Django_db",
-        "HOST": "localhost",
-        "PORT": "",
+        "ENGINE": os.getenv("DATABASE_ENGINE", "mssql"),
+        "NAME": os.getenv("DATABASE_NAME", "Django_db"),
+        "USER": os.getenv("DATABASE_USER", ""),
+        "PASSWORD": os.getenv("DATABASE_PASSWORD", ""),
+        "HOST": os.getenv("DATABASE_HOST", "localhost"),
+        "PORT": os.getenv("DATABASE_PORT", ""),
         "OPTIONS": {
             "driver": "ODBC Driver 17 for SQL Server",
         },

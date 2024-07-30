@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+    web:
+        build: .
+        command: sh -c "python manage.py migrate && python manage.py create_default_superuser && python manage.py runserver 0.0.0.0:8000"
+        volumes:
+            - .:/code
+        ports:
+            - "8000:8000"
+        depends_on:
+            - db
+        environment:
+            - DATABASE_ENGINE=mssql
+            - DATABASE_NAME=Django_db
+            - DATABASE_USER=sa
+            - DATABASE_PASSWORD=yourStrong(!)Password
+            - DATABASE_HOST=db
+            - DATABASE_PORT=1433
+
+    db:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        environment:
+            SA_PASSWORD: "yourStrong(!)Password"
+            ACCEPT_EULA: "Y"
+        ports:
+            - "1433:1433"
+        volumes:
+            - mssql_data:/var/opt/mssql
+
+volumes:
+    mssql_data:
