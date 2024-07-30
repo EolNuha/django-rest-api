@@ -11,7 +11,7 @@ class SoftDelete(models.Model):
     everything = models.Manager()
     objects = NonDeleted()
 
-    def soft_deleted(self):
+    def delete(self):
         self.is_deleted = True
         self.save()
 
